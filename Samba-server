@@ -1,7 +1,5 @@
 Step 1: Install Samba
 
-On Rocky Linux:
-
 sudo dnf install samba samba-client -y
 
 Verify installation:
@@ -13,6 +11,7 @@ Expected output:
 samba
 samba-client
 samba-common
+
 Step 2: Start Samba Service
 sudo systemctl enable smb --now
 sudo systemctl enable nmb --now
@@ -24,6 +23,7 @@ sudo systemctl status smb
 You should see:
 
 Active: active (running)
+
 Step 3: Create Department Folder
 
 Suppose HR department needs shared storage.
@@ -44,6 +44,7 @@ Example:
 
 New password:
 Retype new password:
+
 Step 5: Add Samba Password
 
 Linux password and Samba password are separate.
@@ -80,6 +81,7 @@ No errors should appear.
 
 Step 8: Restart Service
 sudo systemctl restart smb
+
 Step 9: Configure Firewall
 sudo firewall-cmd --permanent --add-service=samba
 sudo firewall-cmd --reload
