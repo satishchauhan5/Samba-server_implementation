@@ -1,0 +1,111 @@
+Step 1: Install Samba
+
+On Rocky Linux:
+
+sudo dnf install samba samba-client -y
+
+Verify installation:
+
+rpm -qa | grep samba
+
+Expected output:
+
+samba
+samba-client
+samba-common
+Step 2: Start Samba Service
+sudo systemctl enable smb --now
+sudo systemctl enable nmb --now
+
+Check status:
+
+sudo systemctl status smb
+
+You should see:
+
+Active: active (running)
+Step 3: Create Department Folder
+
+Suppose HR department needs shared storage.
+
+sudo mkdir /hr-data
+
+Set permissions:
+
+sudo chmod 770 /hr-data
+Step 4: Create User
+
+Create an HR user:
+
+sudo useradd hruser
+sudo passwd hruser
+
+Example:
+
+New password:
+Retype new password:
+Step 5: Add Samba Password
+
+Linux password and Samba password are separate.
+
+sudo smbpasswd -a hruser
+
+Example:
+
+New SMB password:
+Retype new SMB password:
+Added user hruser
+Step 6: Configure Samba Share
+
+Open configuration:
+
+sudo vi /etc/samba/smb.conf
+
+Add:
+
+[HR]
+path = /hr-data
+browseable = yes
+writable = yes
+valid users = hruser
+read only = no
+Step 7: Verify Configuration
+testparm
+
+Expected:
+
+Loaded services file OK.
+
+No errors should appear.
+
+Step 8: Restart Service
+sudo systemctl restart smb
+Step 9: Configure Firewall
+sudo firewall-cmd --permanent --add-service=samba
+sudo firewall-cmd --reload
+
+Verify:
+
+sudo firewall-cmd --list-services
+Step 10: Check Server IP
+ip a
+
+Example:
+
+192.168.1.100
+Step 11: Access from Windows
+
+Press:
+
+Windows + R
+
+Enter:
+
+\\192.168.1.100\HR
+
+Windows asks:
+
+Username: hruser
+Password: ********
+
+After login, users can upload and download files.
